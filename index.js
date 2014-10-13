@@ -1,21 +1,25 @@
-var Router = require('express').Router,
-	superagent = require('superagent');
+var _ = require('underscore'),
+	superagent = require('superagent'),
+	Router = require('express').Router;
+
+var defaultSession = {
+	duration: 24 * 60 * 60 * 1000,
+	activeDuration: 1000 * 60 * 5
+};
 
 module.exports = function(config) {
 
 	var router = new Router;
 
 	config = config || {};
-	config.google || console.error('Google config missing');
-	config.session || console.error('Session config missing');
-	config.authorize || console.error('Authorize config missing');
+	if (!config.google) throw('Google config missing');
+	if (!config.session) throw('Session config missing');
+	if (!config.authorize) throw('Authorize config missing');
 
-	router.use(require('client-sessions')({
-		cookieName: config.session.cookieName || 'bnSess', // cookie name dictates the key name added to the request object
-		secret: config.session.secret || 'somethingsomething', // should be a large unguessable string
-		duration: config.session.duration || 24 * 60 * 60 * 1000, // how long the session will stay valid in ms
-		activeDuration: config.session.activeDuration || 1000 * 60 * 5 // if expiresIn < activeDuration, the session will be extended by activeDuration milliseconds
-	}));
+	if (!config.session.cookieName) throw('Specify a cookieName for the session');
+	if (!config.session.secret) throw('Specify a secret for the session');
+
+	router.use(require('client-sessions')(_.extend({}, defaultSession, config.session)));
 
 	router.get('/oauth2callback', function(req, res, next) {
 		res.send('<!DOCTYPE html><html><body><script src="/oauth2callback/browser.js"></script></body></html>');
