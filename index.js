@@ -69,7 +69,7 @@ module.exports = function(config) {
 			return res.redirect('https://accounts.google.com/o/oauth2/auth?client_id=' +
 				encodeURIComponent(config.google.client_id) +
 				'&redirect_uri=' + encodeURIComponent(config.google.redirect_uri) +
-				'&state=' + encodeURIComponent(JSON.stringify({nextUrl: req.url})) + 
+				'&state=' + encodeURIComponent(JSON.stringify({nextUrl: req.originalUrl})) + 
 				'&scope=' + scope + 
 				'&response_type=token'
 			);
