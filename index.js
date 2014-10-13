@@ -12,12 +12,12 @@ module.exports = function(config) {
 	var router = new Router;
 
 	config = config || {};
-	if (!config.google) throw('Google config missing');
-	if (!config.session) throw('Session config missing');
-	if (!config.authorize) throw('Authorize config missing');
+	if (!config.google) throw new Error('Google config missing');
+	if (!config.session) throw new Error('Session config missing');
+	if (!config.authorize) throw new Error('Authorize config missing');
 
-	if (!config.session.cookieName) throw('Specify a cookieName for the session');
-	if (!config.session.secret) throw('Specify a secret for the session');
+	if (!config.session.cookieName) throw new Error('Specify a cookieName for the session');
+	if (!config.session.secret) throw new Error('Specify a secret for the session');
 
 	router.use(require('client-sessions')(_.extend({}, defaultSession, config.session)));
 
