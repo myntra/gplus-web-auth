@@ -33,10 +33,10 @@ var auth = require('gplus-web-auth')({
     scope: ['profile', 'email']
   },
   session: {
-    cookieName: "gplusauth",
-    secret: "secret",
-    duration: 24 * 60 * 60 * 1000,
-    activeDuration: 1000 * 60 * 5
+    cookieName: "gplusauth", // cookie name dictates the key name added to the request object
+    secret: "secret", // should be a large unguessable string
+    duration: 24 * 60 * 60 * 1000, // how long the session will stay valid in ms
+    activeDuration: 1000 * 60 * 5 // if expiresIn < activeDuration, the session will be extended by activeDuration milliseconds
   },
   authorize: function(req, user, done){
     var authorized = (user.email.split('@')[1] === "application.com");
