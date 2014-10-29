@@ -43,7 +43,7 @@ module.exports = function(config) {
 
 			if (config.authorize(req, response.body, function(yes) {
 				if (!yes) {
-					res.status(401).end();
+					return res.status(401).end();
 				}
 
 				var data = req[config.session.cookieName];
