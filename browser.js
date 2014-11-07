@@ -8,8 +8,9 @@ function find(arr, key){
 }
 
 var state = JSON.parse(decodeURIComponent(find(kvs, 'state')));
+var postURL = window.location.pathname;
 
-superagent.post('/oauth2callback').send({
+superagent.post(postURL).send({
 	token: find(kvs, 'access_token')
 }).end(function(err, res){
 	if(err || res.error) {

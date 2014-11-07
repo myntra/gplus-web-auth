@@ -14,9 +14,9 @@ Available via [npm](http://www.npmjs.org), to install it simply run the followin
 The module takes three parameters,
 
 1. Google+ credentials
-  * Create a client ID as a Google+ Developer.
-  * Setup a redirect URL in their dashboard.
+  * A client ID. Create one on Google+ Developer Console and also configure whitelisted domains.
   * Configure the scope of permissions to ask for.
+  * (optional) Configure a custom oauth2callback path, default is `/oauth2callback`.
 2. Session details
   * Configure the name of the cookie to use.
   * A random string to encrypt the cookies.
@@ -29,8 +29,8 @@ The module takes three parameters,
 var auth = require('gplus-web-auth')({
   google: {
     client_id: "applicationid123.apps.googleusercontent.com",
-    redirect_uri: "http://www.application.com/oauth2callback",
-    scope: ['profile', 'email']
+    scope: ['profile', 'email'],
+    callbackPath: "/custom/oauth2callback"
   },
   session: {
     cookieName: "gplusauth", // cookie name dictates the key name added to the request object

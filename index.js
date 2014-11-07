@@ -19,19 +19,21 @@ module.exports = function(config) {
 	if (!config.session.cookieName) throw new Error('Specify a cookieName for the session');
 	if (!config.session.secret) throw new Error('Specify a secret for the session');
 
+	var callbackPath = config.google.callbackPath || '/oauth2callback';
+
 	router.use(require('client-sessions')(_.extend({}, defaultSession, config.session)));
 
-	router.get('/oauth2callback', function(req, res, next) {
-		res.send('<!DOCTYPE html><html><body><script src="/oauth2callback/browser.js"></script></body></html>');
+	router.get(callbackPath, function(req, res, next) {
+		res.send('<!DOCTYPE html><html><body><script src="' + callbackPath + '/browser.js"></script></body></html>');
 	});
 
-	router.get('/oauth2callback/browser.js', function(req, res, next) {
+	router.get(callbackPath + '/browser.js', function(req, res, next) {
 		// Express 4 uses res.sendFile instead of res.sendfile
 		var filename = __dirname + '/static/browser.js';
 		res.sendFile ? res.sendFile(filename) : res.sendfile(filename);
 	});
 
-	router.post('/oauth2callback', function(req, res) {
+	router.post(callbackPath, function(req, res) {
 		superagent.get('https://www.googleapis.com/oauth2/v1/tokeninfo')
 		.query({
 			access_token: req.body.token
@@ -66,9 +68,10 @@ module.exports = function(config) {
 		if (!data.token || (data.tokenExpiry < new Date().getTime())) {
 			data.token = data.tokenExpiry = data.email = null;
 
+			var redirect_uri = req.protocol + '://' + req.get('host') + callbackPath;
 			return res.redirect('https://accounts.google.com/o/oauth2/auth?client_id=' +
 				encodeURIComponent(config.google.client_id) +
-				'&redirect_uri=' + encodeURIComponent(config.google.redirect_uri) +
+				'&redirect_uri=' + encodeURIComponent(redirect_uri) +
 				'&state=' + encodeURIComponent(JSON.stringify({nextUrl: req.originalUrl})) + 
 				'&scope=' + scope + 
 				'&response_type=token'
