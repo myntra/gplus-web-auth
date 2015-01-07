@@ -23,17 +23,17 @@ module.exports = function(config) {
 
 	router.use(require('client-sessions')(_.extend({}, defaultSession, config.session)));
 
-	router.get(callbackPath, function(req, res, next) {
+	router.get(callbackPath, function(req, res) {
 		res.send('<!DOCTYPE html><html><body><script src="' + callbackPath + '/browser.js"></script></body></html>');
 	});
 
-	router.get(callbackPath + '/browser.js', function(req, res, next) {
+	router.get(callbackPath + '/browser.js', function(req, res) {
 		// Express 4 uses res.sendFile instead of res.sendfile
 		var filename = __dirname + '/static/browser.js';
 		res.sendFile ? res.sendFile(filename) : res.sendfile(filename);
 	});
 
-	router.post(callbackPath, function(req, res) {
+	router.post(callbackPath, function(req, res, next) {
 		superagent.get('https://www.googleapis.com/oauth2/v1/tokeninfo')
 		.query({
 			access_token: req.body.token
