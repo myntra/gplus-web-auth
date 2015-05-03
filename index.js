@@ -61,7 +61,7 @@ module.exports = function(config) {
 	// Use this as middleware on routes that need authentication
 	router.verify = function (req, res, next) {
 
-		var data = req[config.session.cookieName];
+		var data = req[config.session.cookieName] || {};
 		var scope = encodeURIComponent(config.google.scope.join(' '));
 
 		// if no token, or expired token
