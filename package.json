@@ -1,6 +1,6 @@
 {
   "name": "gplus-web-auth",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Google Plus Login module for Node.js",
   "main": "index.js",
   "scripts": {
