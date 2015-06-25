@@ -41,7 +41,8 @@ var auth = require('gplus-web-auth')({
   authorize: function(req, user, done){
     var authorized = (user.email.split('@')[1] === "application.com");
     done(authorized);
-  }
+  },
+  middlewares:custom middlewares //user can add their own custom middlewares, optional option
 });
 ```
 

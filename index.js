@@ -22,7 +22,9 @@ module.exports = function(config) {
 	var callbackPath = config.google.callbackPath || '/oauth2callback';
 
 	router.use(require('client-sessions')(_.extend({}, defaultSession, config.session)));
-
+	if(config.middlewares){
+		router.use(config.middlewares);
+	}
 	router.get(callbackPath, function(req, res) {
 		res.send('<!DOCTYPE html><html><body><script src="' + callbackPath + '/browser.js"></script></body></html>');
 	});
